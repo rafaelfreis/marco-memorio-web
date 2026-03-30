@@ -1,0 +1,35 @@
+# Netlify: React Router + Hono (Lambda build when NETLIFY=true — see vite.config.ts).
+# Monorepo: in Netlify → Site settings → Build & deploy → Base directory = Deploy/Deploy/apps/web
+# (Do not put a second netlify.toml at the repo root with [build.base] — Netlify CLI can mis-resolve that path.)
+
+[build]
+  command = "npm install --legacy-peer-deps && npm run build"
+  publish = "build/client"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  # Dynamic import in server.mjs keeps the Vite SSR bundle as native ESM (avoids esbuild CJS + TLA errors).
+  node_bundler = "esbuild"
+
+[functions.server]
+  external_node_modules = ["argon2"]
+  included_files = ["./build/server/**"]
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

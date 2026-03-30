@@ -1,0 +1,62 @@
+functionsDirectory = "/Users/rafaelreisneo/Documents/Cursor Marco Memorio/Deploy/Deploy/apps/web/netlify/functions"
+functionsDirectoryOrigin = "default"
+headersOrigin = "config"
+redirectsOrigin = "config"
+plugins = []
+
+[build]
+publish = "/Users/rafaelreisneo/Documents/Cursor Marco Memorio/Deploy/Deploy/apps/web/build/client"
+publishOrigin = "config"
+commandOrigin = "config"
+command = "npm install --legacy-peer-deps && npm run build"
+functions = "/Users/rafaelreisneo/Documents/Cursor Marco Memorio/Deploy/Deploy/apps/web/netlify/functions"
+
+[build.environment]
+NODE_VERSION = "22"
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[functions]
+
+[functions.server]
+external_node_modules = ["argon2"]
+included_files = ["./build/server/**"]
+
+[functions."*"]
+node_bundler = "esbuild"
+
+[[headers]]
+for = "/*"
+
+[headers.values]
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
+Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+for = "/index.html"
+
+[headers.values]
+Cache-Control = "public, max-age=0, must-revalidate"
+
+[[redirects]]
+from = "/*"
+to = "/.netlify/functions/server"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
