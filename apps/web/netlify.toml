@@ -3,11 +3,13 @@
 # (Do not put a second netlify.toml at the repo root with [build.base] — Netlify CLI can mis-resolve that path.)
 
 [build]
-  command = "npm install --legacy-peer-deps && npm run build"
+  # NETLIFY=true forces vite to emit the aws-lambda server bundle (see vite.config.ts).
+  command = "npm install --legacy-peer-deps && NETLIFY=true npm run build"
   publish = "build/client"
 
 [build.environment]
   NODE_VERSION = "22"
+  NETLIFY = "true"
 
 [functions]
   # Dynamic import in server.mjs keeps the Vite SSR bundle as native ESM (avoids esbuild CJS + TLA errors).
